@@ -13,10 +13,7 @@ const port = process.env.PORT
 
 const io = new Server(server,{
     cors:{
-         origin: [
-      "https://grocify-delivery.vercel.app", 
-      "http://localhost:3000" 
-    ],
+        origin:process.env.NEXT_BASE_URL
     }
 })
 
@@ -24,11 +21,7 @@ io.on('connection',(socket)=>{
     console.log('user connected',socket.id)
 
     socket.on('identity',async(userId)=>{
-        try {
-            await axios.post(`${process.env.NEXT_BASE_URL}/api/socket/connect`,{userId,socketId:socket.id})
-        } catch (error) {
-            console.error('Error in identity:', error.message)
-        }
+        await axios.post(`${process.env.NEXT_BASE_URL}/api/socket/connect`,{userId,socketId:socket.id})
     })
     socket.on('updateLocation',async({userId,latitude,longitude})=>{
          console.log(userId,longitude,latitude)
