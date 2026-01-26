@@ -21,7 +21,11 @@ io.on('connection',(socket)=>{
     console.log('user connected',socket.id)
 
     socket.on('identity',async(userId)=>{
-        await axios.post(`${process.env.NEXT_BASE_URL}/api/socket/connect`,{userId,socketId:socket.id})
+        try {
+            await axios.post(`${process.env.NEXT_BASE_URL}/api/socket/connect`,{userId,socketId:socket.id})
+        } catch (error) {
+            console.error('Error in identity:', error.message)
+        }
     })
     socket.on('updateLocation',async({userId,latitude,longitude})=>{
          console.log(userId,longitude,latitude)
