@@ -13,7 +13,10 @@ const port = process.env.PORT
 
 const io = new Server(server,{
     cors:{
-        origin:process.env.NEXT_BASE_URL
+         origin: [
+      "https://grocify-delivery.vercel.app", 
+      "http://localhost:3000" 
+    ],
     }
 })
 
