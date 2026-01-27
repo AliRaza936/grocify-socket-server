@@ -33,7 +33,6 @@ io.on('connection',(socket)=>{
     );
 socket.join(userId);
 
- 
   } catch (err) {
     console.error("Identity error", err);
   }
@@ -50,7 +49,7 @@ socket.join(userId);
     })
 
     socket.on('join-room',async(roomId)=>{
-       
+        socket.join(roomId.toString())
     })
 
     socket.on('send-message',async(message)=>{
