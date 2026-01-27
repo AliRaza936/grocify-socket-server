@@ -31,8 +31,9 @@ io.on('connection',(socket)=>{
         socketId: socket.id,
       }
     );
+socket.join(userId);
 
-    console.log("Socket ID updated:", socket.id);
+ 
   } catch (err) {
     console.error("Identity error", err);
   }
@@ -49,17 +50,16 @@ io.on('connection',(socket)=>{
     })
 
     socket.on('join-room',async(roomId)=>{
-        console.log('join room with',roomId)
-        socket.join(roomId)
+       
     })
 
     socket.on('send-message',async(message)=>{
-        console.log(message)
+
         await axios.post(`${process.env.NEXT_BASE_URL}/api/chat/save`,message)
         io.to(message.roomId).emit('send-message',message)
     })
    socket.on("disconnect", async () => {
-  console.log("user disconnected", socket.id);
+
 
   try {
     await axios.post(`${process.env.NEXT_BASE_URL}/api/socket/disconnect`, {
@@ -71,16 +71,20 @@ io.on('connection',(socket)=>{
 });
 
 })
-app.post('/notify',(req,res)=>{
-    const {event,data,socketId} = req.body
-    if(socketId){
-        io.to(socketId).emit(event,data)
-        console.log('socketIdssss',socketId)
-    }else{
-        io.emit(event,data)
+app.post('/notify', (req, res) => {
+    const { event, data, socketId, userId } = req.body;
+
+    if (socketId) {
+        io.to(socketId).emit(event, data);
+    } else if(userId) {
+       
+        io.to(userId).emit(event, data);
+    } else {
+        io.emit(event, data);
     }
-    return res.status(200).json({success:true})
-})
+
+    return res.status(200).json({ success: true });
+});
 
 server.listen(port,()=>{
     console.log("server started at",port)
