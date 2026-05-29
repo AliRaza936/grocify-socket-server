@@ -85,6 +85,14 @@ app.post('/notify', (req, res) => {
     return res.status(200).json({ success: true });
 });
 
+
+app.get("/isReady", (req, res) => {
+  return res.status(200).json({
+    success: true,
+    message: "Socket server is running successfully",
+  });
+});
+
 server.listen(port,()=>{
     console.log("server started at",port)
 })
